@@ -1,4 +1,4 @@
-% prova tutti i metodi...
+% Tests all methods to produce a plot of the CPU times.
 
 methods = {
     @fixed_point,
@@ -19,6 +19,7 @@ methods = {
 
 [times, iters, results] = try_all_methods(0.999, methods);
 sum(results==0)
+% removes cases in which the algorithm produces a non-solution
 iters_true = iters; iters_true(results~=0) = nan;
 times_true = times; times_true(results~=0) = nan;
 
@@ -39,16 +40,3 @@ leg = {
 %[~, order] = sort(median(times,2));
 order = 1:size(times,2);
 semilogy(times_true(order,:)); legend(leg)
-
-%figure(2)
-%selected=[times_true(order,1),times_true(order,2),times_true(order,4),times_true(order,5),times_true(order,6),times_true(order,10)];
-%semilogy(selected);
-%legend(leg);
-
-% TODO: note that the SIMAX paper claims Newton solves 28
-% problems for alpha=0.99, but our test says otherwise.
-% Indeed, the problem is that there is a line
-% if curres <= tol || curdiff <= tol/10; break; end
-% in Gleich's code; the code break because of the second criterion
-% (difference between successive iterates)
-% and returns a status of "converged", but it is not a solution...

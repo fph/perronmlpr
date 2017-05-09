@@ -1,6 +1,7 @@
 function [x, it] = newton_from_zero(alpha, v, R, tol, maxit);
 % Newton iteration in "Multilinear Pagerank"
-% starts from x0 = 0
+% starts from x0 = 0 and does not normalize, so it
+% should converge to the minimal solution.
 
 if not(exist('tol','var')) || isempty(eps)
     tol = sqrt(eps);

@@ -1,6 +1,7 @@
 function [x, it] = fixed_point(alpha, v, R, tol, maxit);
 % fixed point iteration in "Multilinear Pagerank"
-% starts from x0 = 0
+% starts from x0 = 0 and does not normalize, so it
+% should converge to the minimal solution.
 
 if not(exist('eps','var')) || isempty(eps)
     tol = sqrt(eps);
