@@ -21,7 +21,7 @@ while true
         x_guess = v;
     else
         % updating x with a first-order estimate
-        fx = alpha*R*kron(eye(n),old_x) + alpha*R*kron(old_x,eye(n)) - eye(n);
+        fx = old_alpha*R*kron(eye(n),old_x) + old_alpha*R*kron(old_x,eye(n)) - eye(n);
         falpha = R*kron(old_x,old_x) - v;
         x_guess = old_x + (alpha - old_alpha) * (-fx \ falpha);
     end

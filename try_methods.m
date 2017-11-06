@@ -14,6 +14,8 @@ methods = {
 %    @bootstrap_optimistic,
 %    @bootstrap_optimistic_newton,
     @bootstrap_optimistic_newton_second_order_stepsize,
+    @bootstrap_optimistic_newton_second_order_stepsize_fixed,
+    @bootstrap_optimistic_newton_truly_second_order_stepsize,
     @bootstrap_newton_second_order_stepsize
     };
 
