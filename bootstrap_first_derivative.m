@@ -1,5 +1,6 @@
-function [x, it] = bootstrap_optimistic_newton(target_alpha, v, R, tol, maxit)
-% Successive Newtons incrasing the value of alpha
+function [x, it] = bootstrap_first_derivative(inner_solver, target_alpha, v, R, tol, maxit)
+% Calls an inner solver iteratively over increasing values of alpha
+% Predicts the new x using a first-order Taylor expansion 
 
 if not(exist('tol','var')) || isempty(eps)
     tol = sqrt(eps);
@@ -25,7 +26,7 @@ while true
         falpha = R*kron(old_x,old_x) - v;
         x_guess = old_x + (alpha - old_alpha) * (-fx \ falpha);
     end
-    [x, it] = optimistic_newton(alpha, v, R, tol, maxit-total_iterations, x_guess);
+    [x, it] = inner_solver(alpha, v, R, tol, maxit-total_iterations, x_guess);
     total_iterations = total_iterations + it;
     if alpha >= target_alpha
         break

@@ -1,5 +1,7 @@
-function [x, it] = bootstrap_optimistic_newton(target_alpha, v, R, tol, maxit)
-% Successive Newtons incrasing the value of alpha
+function [x, it] = bootstrap_wrong_derivative(inner_solver, target_alpha, v, R, tol, maxit)
+% Calls an inner solver iteratively over increasing values of alpha
+% Predicts the new x using a first-order Taylor expansion with a "modified"
+% (i.e., wrong) first derivative
 
 if not(exist('tol','var')) || isempty(eps)
     tol = sqrt(eps);
@@ -20,12 +22,17 @@ while true
     if any(isnan(old_x))
         x_guess = v;
     else
-        % updating x with a first-order estimate
+        % TODO: this version has a wrong formula for fx; we should be using
+        % old_alpha instead
+        % updating x with a first-order estimate, with a "wrong" choice of
+        % alpha (should have used old_alpha; instead we use alpha in the
+        % new point).
         fx = alpha*R*kron(eye(n),old_x) + alpha*R*kron(old_x,eye(n)) - eye(n);
+        cond(fx)
         falpha = R*kron(old_x,old_x) - v;
         x_guess = old_x + (alpha - old_alpha) * (-fx \ falpha);
     end
-    [x, it] = newton(alpha, v, R, tol, maxit-total_iterations, x_guess);
+    [x, it] = inner_solver(alpha, v, R, tol, maxit-total_iterations, x_guess);
     total_iterations = total_iterations + it;
     if alpha >= target_alpha
         break
@@ -43,6 +50,10 @@ while true
     if new_alpha > target_alpha
         new_alpha = target_alpha;
     end
+%    alpha, new_alpha
+%    [x_guess-x]
+%      xguessdiff = norm(x_guess-x) %TODO: debug print
+%      new_alpha %TODO: debug print
     [alpha, old_alpha] = deal(new_alpha, alpha);
     old_x = x;
     if total_iterations >= maxit
