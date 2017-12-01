@@ -13,6 +13,7 @@ methods = {
     @(a,v,R,tol) bootstrap_wrong_derivative(@optimistic_newton,a,v,R,tol), 'Bootstrap ON wrong 1st';
     @(a,v,R,tol) bootstrap_second_derivative(@optimistic_newton,a,v,R,tol), 'Bootstrap ON 2nd derivative';
     @(a,v,R,tol) bootstrap_derivativefree(@optimistic_newton,a,v,R,tol), 'Bootstrap ON derivative-free';
+    @(a,v,R,tol) bootstrap_second_derivative_plus_previous(@optimistic_newton,a,v,R,tol), 'Bootstrap ON derivative+prev';
     @(a,v,R,tol) bootstrap_first_derivative(@newton,a,v,R,tol), 'Bootstrap N 1st derivative';
     @(a,v,R,tol) bootstrap_wrong_derivative(@newton,a,v,R,tol), 'Bootstrap N wrong 1st';
     @(a,v,R,tol) bootstrap_second_derivative(@newton,a,v,R,tol), 'Bootstrap N 2nd derivative';
