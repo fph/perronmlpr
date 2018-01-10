@@ -33,7 +33,10 @@ while true
         partialx_prime = R*kron(eye(n),old_x) + R*kron(old_x,eye(n)) + old_alpha*R*kron(eye(n), xprime) + old_alpha*R*kron(xprime, eye(n));
         % derivative of inv(partialx) =
         % -inv(partialx)*partialx_prime*inv(partialx)
-        xsecond = -partialx \ (partialx_prime * xprime) - partialx \ partialalpha_prime;
+        % xsecond = -partialx \ (partialx_prime * xprime) - partialx \ partialalpha_prime;
+        % alternative formula for xsecond
+        t = 2*old_x + old_alpha*xprime;
+        xsecond = -partialx \ (R*kron(xprime,t) + R*kron(t, xprime));        
         x_guess_secondorder = old_x + (alpha - old_alpha) * xprime + 1/2*(alpha - old_alpha)^2 * xsecond;        
         x_guess = x_guess_secondorder;
     end
