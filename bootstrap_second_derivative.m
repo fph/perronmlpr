@@ -1,4 +1,4 @@
-function [x, it] = bootstrap_first_derivative(inner_solver, target_alpha, v, R, tol, maxit)
+function [x, it] = bootstrap_first_derivative(inner_solver, target_alpha, v, R, tol, maxit, relative_speed)
 % Calls an inner solver iteratively over increasing values of alpha
 % Predicts the new x using a second-order Taylor expansion 
 
@@ -8,9 +8,11 @@ end
 if not(exist('maxit','var')) || isempty(maxit)
     maxit = 10000;
 end
+if not(exist('relative_speed', 'var')) || isempty(relative_speed)
+    relative_speed = 0.01;
+end
 
 n = length(v);
-relative_speed = 0.01;
 
 total_iterations = 0;
 old_x = nan;

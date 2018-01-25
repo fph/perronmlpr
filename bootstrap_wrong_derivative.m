@@ -1,4 +1,4 @@
-function [x, it] = bootstrap_wrong_derivative(inner_solver, target_alpha, v, R, tol, maxit)
+function [x, it] = bootstrap_wrong_derivative(inner_solver, target_alpha, v, R, tol, maxit, relative_speed)
 % Calls an inner solver iteratively over increasing values of alpha
 % Predicts the new x using a first-order Taylor expansion with a "modified"
 % (i.e., wrong) first derivative
@@ -9,9 +9,11 @@ end
 if not(exist('maxit','var')) || isempty(maxit)
     maxit = 10000;
 end
+if not(exist('relative_speed', 'var')) || isempty(relative_speed)
+    relative_speed = 0.01;
+end
 
 n = length(v);
-relative_speed = 0.01;
 
 total_iterations = 0;
 old_x = nan;
@@ -22,13 +24,10 @@ while true
     if any(isnan(old_x))
         x_guess = v;
     else
-        % TODO: this version has a wrong formula for fx; we should be using
-        % old_alpha instead
         % updating x with a first-order estimate, with a "wrong" choice of
         % alpha (should have used old_alpha; instead we use alpha in the
         % new point).
         fx = alpha*R*kron(eye(n),old_x) + alpha*R*kron(old_x,eye(n)) - eye(n);
-        cond(fx)
         falpha = R*kron(old_x,old_x) - v;
         x_guess = old_x + (alpha - old_alpha) * (-fx \ falpha);
     end

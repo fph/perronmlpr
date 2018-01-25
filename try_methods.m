@@ -1,5 +1,8 @@
 % Tests all methods to produce a plot of the CPU times.
 
+relspeed = 0.01;
+maxit=10000;
+
 methods = {
     @fixed_point, 'FixedPoint';
     @innout, 'InnOut';
@@ -9,18 +12,18 @@ methods = {
     @optimistic, 'Optimistic';
 %    @optimistic_fixed_point, 
     @optimistic_newton, 'Optimistic Newton';
-    @(a,v,R,tol) bootstrap_first_derivative(@optimistic_newton,a,v,R,tol), 'Bootstrap ON 1st derivative';
-    @(a,v,R,tol) bootstrap_wrong_derivative(@optimistic_newton,a,v,R,tol), 'Bootstrap ON wrong 1st';
-    @(a,v,R,tol) bootstrap_second_derivative(@optimistic_newton,a,v,R,tol), 'Bootstrap ON 2nd derivative';
-    @(a,v,R,tol) bootstrap_derivativefree(@optimistic_newton,a,v,R,tol), 'Bootstrap ON derivative-free';
-    @(a,v,R,tol) bootstrap_second_derivative_plus_previous(@optimistic_newton,a,v,R,tol), 'Bootstrap ON derivative+prev';
-    @(a,v,R,tol) bootstrap_first_derivative(@newton,a,v,R,tol), 'Bootstrap N 1st derivative';
-    @(a,v,R,tol) bootstrap_wrong_derivative(@newton,a,v,R,tol), 'Bootstrap N wrong 1st';
-    @(a,v,R,tol) bootstrap_second_derivative(@newton,a,v,R,tol), 'Bootstrap N 2nd derivative';
-    @(a,v,R,tol) bootstrap_derivativefree(@newton,a,v,R,tol), 'Bootstrap N derivative-free';
+    @(a,v,R,tol) bootstrap_first_derivative(@optimistic_newton,a,v,R,tol,maxit,relspeed), 'Bootstrap ON 1st derivative';
+    @(a,v,R,tol) bootstrap_wrong_derivative(@optimistic_newton,a,v,R,tol,maxit,relspeed), 'Bootstrap ON wrong 1st';
+    @(a,v,R,tol) bootstrap_second_derivative(@optimistic_newton,a,v,R,tol,maxit,relspeed), 'Bootstrap ON 2nd derivative';
+    @(a,v,R,tol) bootstrap_derivativefree(@optimistic_newton,a,v,R,tol,maxit,relspeed), 'Bootstrap ON derivative-free';
+%    @(a,v,R,tol) bootstrap_second_derivative_plus_previous(@optimistic_newton,a,v,R,tol,maxit,relspeed), 'Bootstrap ON derivative+prev';
+    @(a,v,R,tol) bootstrap_first_derivative(@newton,a,v,R,tol,maxit,relspeed), 'Bootstrap N 1st derivative';
+    @(a,v,R,tol) bootstrap_wrong_derivative(@newton,a,v,R,tol,maxit,relspeed), 'Bootstrap N wrong 1st';
+    @(a,v,R,tol) bootstrap_second_derivative(@newton,a,v,R,tol,maxit,relspeed), 'Bootstrap N 2nd derivative';
+    @(a,v,R,tol) bootstrap_derivativefree(@newton,a,v,R,tol,maxit,relspeed), 'Bootstrap N derivative-free';
     };
 
-[times, iters, results] = try_all_methods(0.99, methods(:,1));
+[times, iters, results] = try_all_methods(0.9, methods(:,1));
 sum(results==0)
 % removes cases in which the algorithm produces a non-solution
 iters_true = iters; iters_true(results~=0) = nan;
