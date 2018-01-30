@@ -38,9 +38,14 @@ y = var('y')
 poly = sum(eq.monomial_coefficient(x[-1]^i)* y^i for i in range(0, 2^n+1))
 numsol = poly.roots(ring=RR)
 
+solutions = []
 for sol, mult in numsol:
-	for J in gbasis[:-1]:
-		solve()
+	# Uses the special form of the gbasis is in "lex" form
+	v = [Infinity] * n
+	for i in range(0,n-1):
+		v[i] = -gbasis[i].subs({x[-1]:sol}).constant_coefficient()
+	v[-1] = sol
+	solutions.append(v)
 
 #	return tuple(a[0] for a in numsol)
 
