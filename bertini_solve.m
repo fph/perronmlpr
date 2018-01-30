@@ -17,13 +17,22 @@ for i = 1:n
     xx = [xx; x(i)*x];
 end
 
-alphas = 0.7:0.01:0.8;
+alphas = 0.95:0.0002:1;
 
 xs = [];
 
 figure;
 
 hold on;
+
+
+% copied from try_methods.m
+set(0,'DefaultAxesFontSize',18);
+set(0,'DefaultLegendFontSize',16);
+set(0,'DefaultLineLineWidth',2);
+set(0,'DefaultLineMarkerSize', 10);
+set(0,'defaultaxescolororder',[0 0 0; 0 0 0.8; 1 0 0; 0 1 0]);
+set(0,'defaultaxeslinestyleorder',{'-','--',':','-.'})
 
 for i = 1:length(alphas)
     alpha = alphas(i);
@@ -39,10 +48,15 @@ for i = 1:length(alphas)
     [x_re,~] = sols.x.real_imag;
     x_re = double(x_re);
     
-    % filter solutions: some of them have sum=1, some have sum=
+    % filter solutions: some of them have sum=1, some have
+    % sum=(1-alpha)/alpha
     
+    x_re = x_re(:, sum(x_re) > mean([1, (1-alpha)/alpha]));
+    x_re = x_re(:, all(x_re >= sqrt(eps)));
     
-    plot(alpha*ones(size(x_re)), x_re, 'x');
+    x_re = x_re(1,:); % only plots first component
+        
+    plot(alpha*ones(size(x_re)), x_re, 'xb');
 end
 
 
