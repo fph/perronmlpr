@@ -17,7 +17,8 @@ for i = 1:n
     xx = [xx; x(i)*x];
 end
 
-alphas = 0.95:0.0002:1;
+%alphas = 0.95:0.0002:1;
+alphas = linspace(0.7,1,300);
 
 xs = [];
 
@@ -34,6 +35,7 @@ set(0,'DefaultLineMarkerSize', 10);
 set(0,'defaultaxescolororder',[0 0 0; 0 0 0.8; 1 0 0; 0 1 0]);
 set(0,'defaultaxeslinestyleorder',{'-','--',':','-.'})
 
+nsols = NaN;
 for i = 1:length(alphas)
     alpha = alphas(i);
 
@@ -55,10 +57,15 @@ for i = 1:length(alphas)
     x_re = x_re(:, all(x_re >= sqrt(eps)));
     
     x_re = x_re(1,:); % only plots first component
-        
+     
+    if nsols ~= size(x_re, 2)
+        fprintf('%d solutions for alpha=%g', size(x_re, 2), alpha);
+    end
+    nsols = size(x_re, 2);
+    
     plot(alpha*ones(size(x_re)), x_re, 'xb');
 end
 
-
+xlabel('\alpha')
 
 hold off;
